@@ -32,6 +32,7 @@ public class Loger
     public String mes;
 
     //классификация методов испольования логера
+    public Model merj;
     public Model user; //действие пользователя
     public Model sys; //действие программы
     public Model ex; //сообщение об ошибке catch
@@ -39,6 +40,8 @@ public class Loger
     //инициирует переменные при запуске логера
     //при необходимости добавить новый тип лога, править именно тут
     public Loger(){
+
+
         //инициируем лог user
         id = 1;
         type = "user";
@@ -62,7 +65,7 @@ public class Loger
 
     public static String getMessage(Model m){
         String s = "";
-        s = s + m.id + "\t" + m.type + "\t" + m.mes + "\n";
+        s = s + m.id + " " + m.type + " " + m.mes + "\n";
         return s;
     }
 
@@ -107,7 +110,7 @@ public class Loger
         String s = "";
         int i = 0;
         while (i < m.header.length){
-            s = s + m.header[i] + "\t";
+            s = s + m.header[i] + " ";
             i++;
         }
         s = s + "\n";
@@ -116,7 +119,7 @@ public class Loger
         while (i < m.data.length){
             int j = 0;
             while (j < m.header.length){
-                s = s + m.data[i][j] + "\t";
+                s = s + m.data[i][j] + " ";
                 j++;
             }
             s = s + "\n";

@@ -43,7 +43,7 @@ public class Widget extends JPanel {
         //log.user.message("инициирую логер");
         tmpFrame = new JFrame("loger");
         lf = tmpFrame.getContentPane();
-        tmpFrame.setSize(300,300);
+        tmpFrame.setSize(450,300);
         tmpFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         lf.setBackground(Color.white);
         tmpFrame.setLayout(gl);

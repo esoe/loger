@@ -17,6 +17,7 @@ public class Model extends ArrScheme {
     public String mes;
 
     public Model(int id, String type, String mes){
+
         this.id = id;
         this.type = type;
         this.mes = mes;
@@ -24,6 +25,7 @@ public class Model extends ArrScheme {
         this.data[0][0] = this.id;
         this.data[0][1] = this.type;
         this.data[0][2] = this.mes;
+
     }
    // AdjustmentEvent event = new
     //добавляем строку в модель
