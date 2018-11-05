@@ -1,6 +1,8 @@
 package esoe;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,7 @@ public class Widget extends JPanel {
     public JTextField tf = new JTextField("командная строка");
     public JButton buttonSettings = new JButton("настройки");
     public Loger log = new Loger();
+    //public ModelListener modellistener = new ModelListener();
 
     public Widget(){
         this.setLayout(bl);
@@ -53,13 +56,16 @@ public class Widget extends JPanel {
         panelText.setLayout(gl);
         panelText.add(ta, 0);
         ta.setText(log.getText(log.user));
-
+        //log.user
+        log.user.addTableModelListener(new ModelListener(log.user) );
 
         buttonSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("нажата кнопка buttonSettings");
                 log.user.message("нажата кнопка buttonSettings");
-                //ta.repaint();
+                ta.append(log.getMessage(log.user));
+
+
                 /**
                 if(panelText.isVisible()){
                     panelText.setVisible(false);

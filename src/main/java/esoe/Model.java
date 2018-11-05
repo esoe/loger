@@ -1,7 +1,10 @@
 package esoe;
 
+
+
 import esoe.model.ArrScheme;
 
+import java.awt.event.AdjustmentEvent;
 import java.util.Date;
 
 public class Model extends ArrScheme {
@@ -22,7 +25,7 @@ public class Model extends ArrScheme {
         this.data[0][1] = this.type;
         this.data[0][2] = this.mes;
     }
-
+   // AdjustmentEvent event = new
     //добавляем строку в модель
     public void message(String s){
         Loger.add(this, s);

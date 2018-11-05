@@ -59,19 +59,21 @@ public class Loger
 
     }
 
+
+    public static String getMessage(Model m){
+        String s = "";
+        s = s + m.id + "\t" + m.type + "\t" + m.mes + "\n";
+        return s;
+    }
+
     /**
      *
      * @param m
      * @param s
      */
     public static void add(Model m, String s){
-
         m.id++;
         m.mes = s;
-
-        //сюда приходят обновленные значения loger.user
-        //надо их корректно добавить в модель и потом передать на текстовую область
-        System.out.println(m.id + m.type + " ... " + m.mes);
 
         Object[][] d = new Object[m.data.length+1][m.header.length];;
         int i = 0;
@@ -86,7 +88,7 @@ public class Loger
         d[m.data.length][0] = m.id;
         d[m.data.length][1] = m.type;
         d[m.data.length][2] = m.mes;
-        System.out.println(m.type);
+        //System.out.println(m.type);
 
 
         m.data = new Object[d.length][m.header.length];
@@ -94,7 +96,7 @@ public class Loger
         while (i < m.data.length){
             int j = 0;
             while (j < m.header.length){
-                d[i][j] = m.data[i][j];
+                m.data[i][j] = d[i][j];
                 j++;
             }
             i++;
