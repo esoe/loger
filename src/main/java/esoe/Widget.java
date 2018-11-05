@@ -37,6 +37,7 @@ public class Widget extends JPanel {
 
     //форма, для запуска в самостоятельном окне.
     public void initFrame(){
+        //log.user.message("инициирую логер");
         tmpFrame = new JFrame("loger");
         lf = tmpFrame.getContentPane();
         tmpFrame.setSize(300,300);
@@ -51,12 +52,13 @@ public class Widget extends JPanel {
         panelText.setBackground(Color.blue);
         panelText.setLayout(gl);
         panelText.add(ta, 0);
-        ta.setText("Текстовая область:" + "\n");
+        ta.setText(log.user.getText());
 
 
         buttonSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("нажата кнопка buttonSettings");
+                log.user.message("нажата кнопка buttonSettings");
                 if(panelText.isVisible()){
                     panelText.setVisible(false);
                     panelSettings.setVisible(true);
