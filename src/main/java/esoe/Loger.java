@@ -59,6 +59,71 @@ public class Loger
 
     }
 
+    /**
+     *
+     * @param m
+     * @param s
+     */
+    public static void add(Model m, String s){
+
+        m.id++;
+        m.mes = s;
+
+        //сюда приходят обновленные значения loger.user
+        //надо их корректно добавить в модель и потом передать на текстовую область
+        System.out.println(m.id + m.type + " ... " + m.mes);
+
+        Object[][] d = new Object[m.data.length+1][m.header.length];;
+        int i = 0;
+        while (i < m.data.length){
+            int j = 0;
+            while (j < m.header.length){
+                d[i][j] = m.data[i][j];
+                j++;
+            }
+            i++;
+        }
+        d[m.data.length][0] = m.id;
+        d[m.data.length][1] = m.type;
+        d[m.data.length][2] = m.mes;
+        System.out.println(m.type);
+
+
+        m.data = new Object[d.length][m.header.length];
+        i = 0;
+        while (i < m.data.length){
+            int j = 0;
+            while (j < m.header.length){
+                d[i][j] = m.data[i][j];
+                j++;
+            }
+            i++;
+        }
+    }
+
+    public String getText(Model m){
+        String s = "";
+        int i = 0;
+        while (i < m.header.length){
+            s = s + m.header[i] + "\t";
+            i++;
+        }
+        s = s + "\n";
+
+        i = 0;
+        while (i < m.data.length){
+            int j = 0;
+            while (j < m.header.length){
+                s = s + m.data[i][j] + "\t";
+                j++;
+            }
+            s = s + "\n";
+            i++;
+        }
+
+        return s;
+    }
+
     public void initWidget(){
         new Widget();
     }

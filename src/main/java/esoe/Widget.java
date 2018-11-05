@@ -52,19 +52,22 @@ public class Widget extends JPanel {
         panelText.setBackground(Color.blue);
         panelText.setLayout(gl);
         panelText.add(ta, 0);
-        ta.setText(log.user.getText());
+        ta.setText(log.getText(log.user));
 
 
         buttonSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("нажата кнопка buttonSettings");
                 log.user.message("нажата кнопка buttonSettings");
+                //ta.repaint();
+                /**
                 if(panelText.isVisible()){
                     panelText.setVisible(false);
                     panelSettings.setVisible(true);
                 }else{
                     panelText.setVisible(true);
                 }
+                 */
             }
         });
 
