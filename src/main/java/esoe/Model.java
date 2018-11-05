@@ -4,10 +4,11 @@ package esoe;
 
 import esoe.model.ArrScheme;
 
+import javax.swing.table.AbstractTableModel;
 import java.awt.event.AdjustmentEvent;
 import java.util.Date;
 
-public class Model extends ArrScheme {
+public class Model extends AbstractTableModel {
     public String[] header = {"id", "type", "message"};
     public Object[][] data;// = new Object[0][header.length];
 
@@ -31,7 +32,31 @@ public class Model extends ArrScheme {
     //добавляем строку в модель
     public void message(String s){
         Loger.add(this, s);
+        fireTableDataChanged();
     }
+
+    public String getMessage(){
+        String s = "";
+        s = id + " " + type + " " + mes + "\n";
+        return s;
+    }
+
+    public int getColumnCount() {
+        return this.header.length;
+    }
+
+    public int getRowCount() {
+        return this.data.length;
+    }
+
+    public Object getValueAt(int row, int col) {
+        return this.data[row][col];
+    }
+
+    public Model getModel(){
+        return this;
+    }
+
 
     //добавляем значения переменных сообщения к массиву data
     /**
