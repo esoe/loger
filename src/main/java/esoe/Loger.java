@@ -4,6 +4,7 @@ import esoe.model.*; //надо добавить модель listCard
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * log - это таблица, совокупность сообщений о произошедших или грядущих событиях
@@ -27,85 +28,91 @@ import java.awt.*;
 
 public class Loger
 {
-    public int id;
-    public String type;
-    public String mes;
-
-    //классификация методов испольования логера
-    public Model merj;
-    public Model user; //действие пользователя
-    public Model sys; //действие программы
-    public Model ex; //сообщение об ошибке catch
+    public Message message;
+    public ArrayList<Model> model = new ArrayList<Model>();
 
     //инициирует переменные при запуске логера
-    //при необходимости добавить новый тип лога, править именно тут
     public Loger(){
-
-
-        //инициируем лог user
-        id = 1;
-        type = "user";
-        mes = "... loger действий пользователя (user) инициирован ...";
-        user = new Model(id, type, mes);
-
-        //инициируем логер системных сообщений
-        id = 1;
-        type = "sys";
-        mes = "... loger системных сообщений (sys) инициирован ...";
-        sys = new Model(id, type, mes);
-
-        //инициируем логер исключительных ситуаций
-        id = 1;
-        type = "ex";
-        mes = "... loger исключительных ситуаций (ex) инициирован ...";
-        ex = new Model(id, type, mes);
-
+        addModel("DEFAULT");//добавили модель в список
+        //добавляем данные в первую строку
+        add(getModel("DEFAULT"), "инициирована модель " + "DEFAULT");
     }
 
-
-    public static String getMessage(Model m){
-        String s = "";
-        s = s + m.id + " " + m.type + " " + m.mes + "\n";
-        return s;
-    }
-
-    /**
-     *
-     * @param m
-     * @param s
-     */
+    //добавляем в модель новое сообщение
     public static void add(Model m, String s){
-        m.id++;
-        m.mes = s;
-
-        Object[][] d = new Object[m.data.length+1][m.header.length];;
-        int i = 0;
-        while (i < m.data.length){
-            int j = 0;
-            while (j < m.header.length){
-                d[i][j] = m.data[i][j];
-                j++;
+        m.message.setId(m.message.getId()+1);//увеличили значение id++
+        m.message.setContent(s);//установили контент
+                                //type, назваание модели уже задано
+        //проверяем существуют ли данные в модели
+        if (m.data == null) {
+            //задаем начальные параметры data
+            m.data = new Object[1][3];
+            m.data[0][0] = m.message.getId();
+            m.data[0][1] = m.message.getType();
+            m.data[0][2] = m.message.getContent();
+        }else {
+            //создаем новый объект, на строку больше чем data
+            Object[][] d = new Object[m.data.length+1][m.header.length];;
+            //переписываем в новый объект данные data
+            int i = 0;
+            while (i < m.data.length){
+                int j = 0;
+                while (j < m.header.length){
+                    d[i][j] = m.data[i][j];
+                    j++;
+                }
+                i++;
             }
-            i++;
-        }
-        d[m.data.length][0] = m.id;
-        d[m.data.length][1] = m.type;
-        d[m.data.length][2] = m.mes;
-        //System.out.println(m.type);
-
-
-        m.data = new Object[d.length][m.header.length];
-        i = 0;
-        while (i < m.data.length){
-            int j = 0;
-            while (j < m.header.length){
-                m.data[i][j] = d[i][j];
-                j++;
+            //в последнюю строку нового объекта вносим строку сообщения
+            d[m.data.length][0] = m.message.getId();
+            d[m.data.length][1] = m.message.getType();
+            d[m.data.length][2] = m.message.getContent();
+            //переписываем данные из временного объекта в data
+            m.data = new Object[d.length][m.header.length];
+            i = 0;
+            while (i < m.data.length){
+                int j = 0;
+                while (j < m.header.length){
+                    m.data[i][j] = d[i][j];
+                    j++;
+                }
+                i++;
             }
-            i++;
         }
     }
 
+    public void addModel (String name){
+        model.add(new Model(name));
+    }
+
+    //возвращает модель по типу лога
+    public  Model getModel(String name){
+        Model m = new Model();
+        boolean bol = false;
+        int i = 0;
+        System.out.println("поиск модели ... " + name);
+        while (i < this.model.size()){
+            if (this.model.get(i).message.getType() == name){
+                m = this.model.get(i).getModel();
+                bol = true;
+            }else {
+                System.out.println("соответствий не найдено, доступна модель ... "
+                        + this.model.get(i).message.getType());
+            }
+            i++;
+        }
+        if (bol == false) {
+            System.out.println("совпадений не обнаружено ...");
+        }else {
+            System.out.println("... модель" + name + " подключена ...");
+        }
+        return m;
+    }
+    public static String getMessage(Model m){
+        return m.getMessage();
+    }
+
+    //возвращает данные из модели в виде строки
     public String getText(Model m){
         String s = "";
         int i = 0;

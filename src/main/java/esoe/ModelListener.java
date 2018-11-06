@@ -10,34 +10,17 @@ public class ModelListener implements TableModelListener {
     JTextArea ta;
     ModelListener(Model model, JTextArea ta) {
         this.ta = ta;
-
         this.model = model.getModel();
-        System.out.println("слушатель запустился:");//да
-        int i = 0;
-        while(i < this.model.getColumnCount()){
-            System.out.print(this.model.header[i] + " ");
-            i++;
-        }
-        System.out.print("\n");
-
-        i = 0;
-        while (i < this.model.getRowCount()){
-            int j = 0;
-            while (j < this.model.getColumnCount()){
-                System.out.print(this.model.data[i][j] + " ");
-                j++;
-
-            }
-            i++;
-            System.out.print("\n");
-
-        }
-
     }
     public void tableChanged(TableModelEvent e) {
-        int firstRow = e.getFirstRow();
-        int lastRow = e.getLastRow();
-        int index = e.getColumn();
+        //int firstRow = e.getFirstRow();
+        //int lastRow = e.getLastRow();
+        //int index = e.getColumn();
+        if (e.getType() == TableModelEvent.UPDATE){
+            String s = this.model.getMessage();
+            ta.append(s);
+        }
+        /**
         switch (e.getType()) {
             case TableModelEvent.INSERT:
                 System.out.println("успех! 1");
@@ -53,6 +36,7 @@ public class ModelListener implements TableModelListener {
                 System.out.println("успех! 3");
                 break;
         }
+         */
     }
 
 }

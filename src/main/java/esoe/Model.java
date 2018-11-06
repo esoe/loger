@@ -13,31 +13,29 @@ public class Model extends AbstractTableModel {
     public Object[][] data;// = new Object[0][header.length];
 
     //переменные сообщения
-    public int id;
-    public String type;
-    public String mes;
+    public Message message = new Message();
 
-    public Model(int id, String type, String mes){
-
-        this.id = id;
-        this.type = type;
-        this.mes = mes;
-        this.data = new Object[1][3];
-        this.data[0][0] = this.id;
-        this.data[0][1] = this.type;
-        this.data[0][2] = this.mes;
-
+    public  Model(){}
+    //инициация модели по названию (типу логера)
+    public Model(String name){
+        this.message.setType(name);
+        this.message.setId(0);
+        this.message.setContent("");
     }
-   // AdjustmentEvent event = new
+    public Model(Message m){
+        this.message = m;
+    }
+
     //добавляем строку в модель
     public void message(String s){
         Loger.add(this, s);
         fireTableDataChanged();
     }
 
+    //возвращает строку сообщения
     public String getMessage(){
         String s = "";
-        s = id + " " + type + " " + mes + "\n";
+        s = message.getId() + " " + message.getType() + " " + message.getContent() + "\n";
         return s;
     }
 

@@ -26,10 +26,11 @@ public class Widget extends JPanel {
     public JPanel panelText = new JPanel();//текстовая область
     public JPanel panelSettings = new JPanel();//панель настроек
     public JTextArea ta = new JTextArea(); // текстовая область
+    public JScrollPane panelScroll = new JScrollPane (ta);
     public JTextField tf = new JTextField("командная строка");
     public JButton buttonSettings = new JButton("настройки");
     public Loger log = new Loger();
-    public ModelListener modellistener = new ModelListener(log.user, ta);
+    public ModelListener modellistener = new ModelListener(log.getModel("DEFAULT"), ta);
 
     public Widget(){
         this.setLayout(bl);
@@ -54,15 +55,15 @@ public class Widget extends JPanel {
     public void initPanelText(){
         panelText.setBackground(Color.blue);
         panelText.setLayout(gl);
-        panelText.add(ta, 0);
-        ta.setText(log.getText(log.user));
+        panelText.add(panelScroll, 0);
+        ta.setText(log.getText(log.getModel("DEFAULT")));
         //log.user
-        log.user.addTableModelListener(modellistener);
+        log.getModel("DEFAULT").addTableModelListener(modellistener);
 
         buttonSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //System.out.println("нажата кнопка buttonSettings");
-                log.user.message("нажата кнопка buttonSettings");
+                log.getModel("DEFAULT").message("нажата кнопка buttonSettings");
                 //ta.append(log.getMessage(log.user));
 
 
