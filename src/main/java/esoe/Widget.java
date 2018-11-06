@@ -1,8 +1,6 @@
 package esoe;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,30 +16,38 @@ import java.awt.event.ActionListener;
  */
 
 public class Widget extends JPanel {
-    JFrame tmpFrame;//форма, для вывода логера в отдельном окне
+    public JFrame tmpFrame;//форма, для вывода логера в отдельном окне
     Container lf;//контекстная панель, для управления цветом формы
     BorderLayout bl = new BorderLayout();
     GridLayout gl = new GridLayout();
 
     public JPanel panelText = new JPanel();//текстовая область
-    public JPanel panelSettings = new JPanel();//панель настроек
+    public JComboBox combo;
     public JTextArea ta = new JTextArea(); // текстовая область
     public JScrollPane panelScroll = new JScrollPane (ta);
-    public JTextField tf = new JTextField("командная строка");
-    public JButton buttonSettings = new JButton("настройки");
-    public Loger log = new Loger();
-    public ModelListener modellistener = new ModelListener(log.getModel("DEFAULT"), ta);
+    public Loger log; //модель DEFAULT сформирована
+    public ModelListener modelDEFAULTlistener; //слушатель модели DEFAULT
+    public ModelListener modelUSERlistener; //слушатель модели USER
 
     public Widget(){
+        this.initLoger();//лучше инициировать первым, чтобы не пришлось отображать еще не созданные данные
         this.setLayout(bl);
-        this.initPanelSettings();
         this.initPanelText();
+        this.initCombo();
         this.setVisible(true);
+    }
+
+    public void initLoger(){
+        log = new Loger();//модель DEFAULT сформирована
+        modelDEFAULTlistener = new ModelListener(log.getModel("DEFAULT"), ta);//слушатель DEFAULT
+        log.getModel("DEFAULT").addTableModelListener(modelDEFAULTlistener);
+        log.addModel("USER");//модель USER добавлена в loger
+        modelUSERlistener = new ModelListener(log.getModel("USER"), ta);//слушатель USER
+        log.getModel("USER").addTableModelListener(modelUSERlistener);
     }
 
     //форма, для запуска в самостоятельном окне.
     public void initFrame(){
-        //log.user.message("инициирую логер");
         tmpFrame = new JFrame("loger");
         lf = tmpFrame.getContentPane();
         tmpFrame.setSize(450,300);
@@ -56,42 +62,33 @@ public class Widget extends JPanel {
         panelText.setBackground(Color.blue);
         panelText.setLayout(gl);
         panelText.add(panelScroll, 0);
-        ta.setText(log.getText(log.getModel("DEFAULT")));
-        //log.user
-        log.getModel("DEFAULT").addTableModelListener(modellistener);
-
-        buttonSettings.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                //System.out.println("нажата кнопка buttonSettings");
-                log.getModel("DEFAULT").message("нажата кнопка buttonSettings");
-                //ta.append(log.getMessage(log.user));
-
-
-                /**
-                if(panelText.isVisible()){
-                    panelText.setVisible(false);
-                    panelSettings.setVisible(true);
-                }else{
-                    panelText.setVisible(true);
-                }
-                 */
-            }
-        });
-
-        this.add(buttonSettings, bl.NORTH);
         this.add(panelText, bl.CENTER);
-        this.add(tf, bl.SOUTH);
     }
 
-    public void initPanelSettings(){
-        panelSettings.setBackground(Color.red);
-        //panelSettings.setLayout(gl);
-        this.add(panelSettings, bl.CENTER);
+    public void initCombo(){
+        String[] models = new String[log.model.size()];
+        int i = 0;
+        while (i<log.model.size()){
+            models[i] = log.model.get(i).message.getType();
+            i++;
+        }
+        combo = new JComboBox(models);
+        ActionListener actionListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JComboBox box = (JComboBox)e.getSource();
+                String modelChoice = (String)box.getSelectedItem();
+                String s = "Не играйся с combo, пока бесполезно ... \n";
+                //s = s + log.getText(log.getModel(modelChoice));//надо править getText, добавить условие при отсутствии данных
+                ta.setText(s); //вывести все записи в одной модели
+                log.getModel("USER").message("... выбрана модель ..." + modelChoice + " ...");
+                tmpFrame.setTitle("loger: "+ modelChoice);
 
-        panelSettings.setVisible(false);
-
+            }
+        };
+        combo.addActionListener(actionListener);
+        combo.setEditable(false);
+        this.add(combo, bl.NORTH);
     }
-
     public static void main( String[] args )
     {
         new Widget().initFrame();

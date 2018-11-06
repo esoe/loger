@@ -12,14 +12,21 @@ import java.util.ArrayList;
  *
  * назначение:
  * 1. мониторинг хода выполнения программ, дла упрощения поиска ошибок.
+ * 2. мониторинг действий пользователя.
  *
  * метод использования:
- * 1. к программе прикрепляется объект loger extends ArrScheme
+ * 1. к программе прикрепляется объект Loger loger = new Loger();
+ * добавляются необходимые виы логов: loger.addModel("название");
  *
  * 2. когда необходимо записать в лог сообщение,
  * разработчик обращается к соответствующему методу логера,
- * например: loger.type.add(message);
- * или: logger.add(messaege, type);
+ * например: loger.getModel("название").message(string);
+ * или: loger.model(0).add(message);
+ * - логер используется widget, соответственно там могут быть и добавлены необходимые модели в логер.
+ * - в widget также добавляются и слушатели ModelListener событий на каждую модель логера.
+ *   (на кажды тип графических элементов, отображающих логи должен быть свой Класс слушателя)
+ * - также виды моделей логера могут быть добавлены в самом классе Loger,
+ *   при инициализации логера, public Loger(){}
  *
  * 3. Настройки логера:
  * - куда писать лог? (в файл, в базу, в стрим) по ходу разработки важнее всего видеть стрим.
@@ -34,8 +41,6 @@ public class Loger
     //инициирует переменные при запуске логера
     public Loger(){
         addModel("DEFAULT");//добавили модель в список
-        //добавляем данные в первую строку
-        add(getModel("DEFAULT"), "инициирована модель " + "DEFAULT");
     }
 
     //добавляем в модель новое сообщение
@@ -90,21 +95,21 @@ public class Loger
         Model m = new Model();
         boolean bol = false;
         int i = 0;
-        System.out.println("поиск модели ... " + name);
+        //System.out.println("поиск модели ... " + name);
         while (i < this.model.size()){
             if (this.model.get(i).message.getType() == name){
                 m = this.model.get(i).getModel();
                 bol = true;
             }else {
-                System.out.println("соответствий не найдено, доступна модель ... "
-                        + this.model.get(i).message.getType());
+                //System.out.println("соответствий не найдено, доступна модель ... "
+                //       + this.model.get(i).message.getType());
             }
             i++;
         }
         if (bol == false) {
-            System.out.println("совпадений не обнаружено ...");
+            //System.out.println("совпадений не обнаружено ...");
         }else {
-            System.out.println("... модель" + name + " подключена ...");
+            //System.out.println("... модель" + name + " подключена ...");
         }
         return m;
     }
@@ -123,23 +128,23 @@ public class Loger
         s = s + "\n";
 
         i = 0;
-        while (i < m.data.length){
-            int j = 0;
-            while (j < m.header.length){
-                s = s + m.data[i][j] + " ";
-                j++;
+        if (i < m.getRowCount()){
+            while (i < m.getRowCount()){
+                int j = 0;
+                while (j < m.header.length){
+                    s = s + m.data[i][j] + " ";
+                    j++;
+                }
+                s = s + "\n";
+                i++;
             }
-            s = s + "\n";
-            i++;
         }
 
         return s;
     }
-
     public void initWidget(){
         new Widget();
     }
-
     public static void main( String[] args )
     {
         new Loger().initWidget();
