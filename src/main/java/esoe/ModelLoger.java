@@ -2,21 +2,21 @@ package esoe;
 
 import javax.swing.table.AbstractTableModel;
 
-public class Model extends AbstractTableModel {
+public class ModelLoger extends AbstractTableModel {
     public String[] header = {"id", "type", "message"};
     public Object[][] data;// = new Object[0][header.length];
 
     //переменные сообщения
     public Message message = new Message();
 
-    public  Model(){}
+    public ModelLoger(){}
     //инициация модели по названию (типу логера)
-    public Model(String name){
+    public ModelLoger(String name){
         this.message.setType(name);
         this.message.setId(0);
         this.message.setContent("");
     }
-    public Model(Message m){
+    public ModelLoger(Message m){
         this.message = m;
     }
 
@@ -45,7 +45,7 @@ public class Model extends AbstractTableModel {
         return this.data[row][col];
     }
 
-    public Model getModel(){
+    public ModelLoger getModel(){
         return this;
     }
 

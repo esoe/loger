@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
  * 6. текстовое поле
  */
 
-public class Widget extends JPanel {
+public class WidgetLoger extends JPanel {
     public JFrame tmpFrame;//форма, для вывода логера в отдельном окне
     Container lf;//контекстная панель, для управления цветом формы
     BorderLayout bl = new BorderLayout();
@@ -29,7 +29,7 @@ public class Widget extends JPanel {
     public ModelListener modelDEFAULTlistener; //слушатель модели DEFAULT
     public ModelListener modelUSERlistener; //слушатель модели USER
 
-    public Widget(){
+    public WidgetLoger(){
         this.initLoger();//лучше инициировать первым, чтобы не пришлось отображать еще не созданные данные
         this.setLayout(bl);
         this.initPanelText();
@@ -48,7 +48,7 @@ public class Widget extends JPanel {
 
     //форма, для запуска в самостоятельном окне.
     public void initFrame(){
-        tmpFrame = new JFrame("loger");
+        tmpFrame = new JFrame("loger: "+ log.model.get(0).message.getType());
         lf = tmpFrame.getContentPane();
         tmpFrame.setSize(450,300);
         tmpFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,8 +77,7 @@ public class Widget extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 JComboBox box = (JComboBox)e.getSource();
                 String modelChoice = (String)box.getSelectedItem();
-                String s = "Не играйся с combo, пока бесполезно ... \n";
-                //s = s + log.getText(log.getModel(modelChoice));//надо править getText, добавить условие при отсутствии данных
+                String s = log.getText(log.getModel(modelChoice));
                 ta.setText(s); //вывести все записи в одной модели
                 log.getModel("USER").message("... выбрана модель ..." + modelChoice + " ...");
                 tmpFrame.setTitle("loger: "+ modelChoice);
@@ -89,9 +88,10 @@ public class Widget extends JPanel {
         combo.setEditable(false);
         this.add(combo, bl.NORTH);
     }
+/**
     public static void main( String[] args )
     {
-        new Widget().initFrame();
+        new WidgetLoger().initFrame();
     }
-
+*/
 }

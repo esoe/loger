@@ -1,9 +1,5 @@
 package esoe;
 
-import esoe.model.*; //надо добавить модель listCard
-
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -36,7 +32,7 @@ import java.util.ArrayList;
 public class Loger
 {
     public Message message;
-    public ArrayList<Model> model = new ArrayList<Model>();
+    public ArrayList<ModelLoger> model = new ArrayList<ModelLoger>();
 
     //инициирует переменные при запуске логера
     public Loger(){
@@ -44,7 +40,7 @@ public class Loger
     }
 
     //добавляем в модель новое сообщение
-    public static void add(Model m, String s){
+    public static void add(ModelLoger m, String s){
         m.message.setId(m.message.getId()+1);//увеличили значение id++
         m.message.setContent(s);//установили контент
                                 //type, назваание модели уже задано
@@ -87,12 +83,12 @@ public class Loger
     }
 
     public void addModel (String name){
-        model.add(new Model(name));
+        model.add(new ModelLoger(name));
     }
 
     //возвращает модель по типу лога
-    public  Model getModel(String name){
-        Model m = new Model();
+    public ModelLoger getModel(String name){
+        ModelLoger m = new ModelLoger();
         boolean bol = false;
         int i = 0;
         //System.out.println("поиск модели ... " + name);
@@ -113,37 +109,43 @@ public class Loger
         }
         return m;
     }
-    public static String getMessage(Model m){
+    public static String getMessage(ModelLoger m){
         return m.getMessage();
     }
 
     //возвращает данные из модели в виде строки
-    public String getText(Model m){
+    public String getText(ModelLoger m){
         String s = "";
         int i = 0;
-        while (i < m.header.length){
+        while (i < m.getColumnCount()){
             s = s + m.header[i] + " ";
             i++;
         }
         s = s + "\n";
 
-        i = 0;
-        if (i < m.getRowCount()){
-            while (i < m.getRowCount()){
-                int j = 0;
-                while (j < m.header.length){
-                    s = s + m.data[i][j] + " ";
-                    j++;
+        //добавим условие на случай, если модель данных пустая или отсутствует
+        if (m.data != null){
+            i = 0;
+            if (i < m.getRowCount()){
+                while (i < m.getRowCount()){
+                    int j = 0;
+                    while (j < m.header.length){
+                        s = s + m.data[i][j] + " ";
+                        j++;
+                    }
+                    s = s + "\n";
+                    i++;
                 }
-                s = s + "\n";
-                i++;
             }
+        }else {
+            s = s + "в логе " + m.message.getType() + " отсутствуют данные для отображения ..." + "\n";
         }
+
 
         return s;
     }
     public void initWidget(){
-        new Widget();
+        new WidgetLoger().initFrame();
     }
     public static void main( String[] args )
     {
